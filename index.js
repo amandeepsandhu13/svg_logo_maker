@@ -1,9 +1,8 @@
-#!/usr/bin/env node
-
 const inquirer = require('inquirer');
 const fs = require('fs');
 const { Triangle, Circle, Square } = require('./lib/shapes');
 
+// command line inputs to select shape, color and text for logo
 const questions = [
   {
     type: 'input',
@@ -32,6 +31,7 @@ const questions = [
 inquirer.prompt(questions).then(answers => {
   const { text, textColor, shape, shapeColor } = answers;
 
+  // creating obeject for the selected logo shape
   let shapeElement;
   if (shape === 'circle') {
     shapeElement = new Circle();
@@ -43,13 +43,14 @@ inquirer.prompt(questions).then(answers => {
 
   shapeElement.setColor(shapeColor);
 
+  // generating SVG element from the selected content
   const svgContent = `
     <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
       ${shapeElement.render()}
       <text x="150" y="125" font-size="60" text-anchor="middle" fill="${textColor}">${text}</text>
     </svg>
   `;
-
+ // writing SVG content to file logo.svg
   fs.writeFileSync('logo.svg', svgContent.trim());
   console.log('Generated logo.svg');
 });
